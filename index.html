@@ -4,67 +4,244 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Anteractive.io — Interactive Mobile Games & Apps</title>
+  <link rel="icon" type="image/png" href="talking-indie/app_icon.png" />
   <style>
     :root {
-      --bg-deep: #0d1117;
-      --bg-surface: #161b22;
-      --bg-glass: rgba(22, 27, 34, 0.72);
-      --border: #30363d;
-      --border-glow: rgba(88, 166, 255, 0.45);
-      --text-primary: #f0f6fc;
-      --text-secondary: #8b949e;
-      --accent-blue: #58a6ff;
-      --accent-purple: #a371f7;
-      --accent-green: #238636;
-      --accent-green-hover: #2ea043;
+      --bg: #0d1117; --surface: #161b22; --glass: rgba(22,27,34,0.75);
+      --border: #30363d; --text: #f0f6fc; --muted: #8b949e;
+      --blue: #58a6ff; --purple: #a371f7; --green: #238636;
     }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
+    html, * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
-      background-color: var(--bg-deep);
-      color: var(--text-primary);
-      min-height: 100vh;
-      overflow-x: hidden;
-      line-height: 1.6;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; line-height: 1.6;
     }
-
     .space-bg {
-      position: fixed;
-      inset: 0;
-      z-index: -2;
+      position: fixed; inset: 0; z-index: -2;
       background:
-        radial-gradient(ellipse 80% 50% at 20% -10%, rgba(163, 113, 247, 0.22), transparent 60%),
-        radial-gradient(ellipse 65% 45% at 85% 15%, rgba(88, 166, 255, 0.18), transparent 55%),
-        radial-gradient(ellipse 50% 40% at 50% 100%, rgba(35, 134, 54, 0.12), transparent 60%),
-        var(--bg-deep);
+        radial-gradient(ellipse 80% 50% at 20% -10%, rgba(163,113,247,0.22), transparent 60%),
+        radial-gradient(ellipse 65% 45% at 85% 15%, rgba(88,166,255,0.18), transparent 55%),
+        var(--bg);
     }
-
-    #starfield {
-      position: fixed;
-      inset: 0;
-      z-index: -1;
-      pointer-events: none;
-    }
-
+    #starfield { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
     header {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      background: rgba(13, 17, 23, 0.78);
-      border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; z-index: 20; backdrop-filter: blur(14px);
+      background: rgba(13,17,23,0.8); border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      max-width: 1040px; margin: 0 auto; padding: 14px 24px;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text); font-weight: 700; font-size: 1.15rem; }
+    .brand-orbit {
+      width: 28px; height: 28px; border-radius: 8px; display: grid; place-items: center;
+      background: linear-gradient(135deg, var(--purple), var(--blue)); font-weight: 800; color: #fff;
+    }
+    .nav-menu { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .nav-app-btn {
+      display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px 6px 8px;
+      background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 999px;
+      color: var(--text); font-size: 0.9rem; font-weight: 500; cursor: pointer;
+    }
+    .nav-app-btn:hover { border-color: var(--blue); background: rgba(88,166,255,0.12); }
+    .nav-app-btn img { width: 22px; height: 22px; border-radius: 6px; object-fit: cover; }
+    .nav-link { color: var(--muted); text-decoration: none; font-size: 0.9rem; padding: 6px 12px; }
+    .nav-link:hover { color: var(--text); }
+    main { max-width: 1040px; margin: 0 auto; padding: 64px 24px 80px; }
+    .hero { text-align: center; max-width: 680px; margin: 0 auto 60px; }
+    .badge {
+      display: inline-flex; align-items: center; gap: 8px; padding: 5px 14px; border-radius: 999px;
+      font-size: 0.82rem; color: var(--blue); background: rgba(88,166,255,0.1);
+      border: 1px solid rgba(88,166,255,0.3); margin-bottom: 18px;
+    }
+    .badge-dot { width: 7px; height: 7px; border-radius: 50%; background: #3fb950; }
+    .hero h1 {
+      font-size: clamp(2.1rem, 5vw, 3.2rem); font-weight: 800; line-height: 1.15; margin-bottom: 14px;
+      background: linear-gradient(120deg, #fff 30%, #a371f7 70%, #58a6ff 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .hero p { color: var(--muted); font-size: 1.05rem; }
+    .section-title { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 20px; }
+    .apps-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+    .app-card {
+      background: var(--glass); border: 1px solid var(--border); border-radius: 16px; padding: 24px;
+      cursor: pointer; display: flex; flex-direction: column; gap: 16px; transition: transform 0.2s, border-color 0.2s;
+    }
+    .app-card:hover { transform: translateY(-4px); border-color: var(--blue); }
+    .app-card.upcoming { cursor: default; border-style: dashed; opacity: 0.7; }
+    .app-card.upcoming:hover { transform: none; border-color: var(--border); }
+    .app-card-header { display: flex; align-items: center; gap: 16px; }
+    .app-icon { width: 64px; height: 64px; border-radius: 16px; object-fit: cover; border: 1px solid var(--border); flex-shrink: 0; }
+    .status-pill {
+      display: inline-block; font-size: 0.75rem; font-weight: 600; padding: 2px 10px; border-radius: 999px;
+      background: rgba(63,185,80,0.15); color: #3fb950; border: 1px solid rgba(63,185,80,0.35);
+    }
+    .status-pill.soon { background: rgba(163,113,247,0.12); color: #d2a8ff; border-color: rgba(163,113,247,0.35); }
+    .app-desc { color: var(--muted); font-size: 0.94rem; flex: 1; }
+    .card-footer {
+      display: flex; justify-content: space-between; padding-top: 12px;
+      border-top: 1px solid var(--border); font-size: 0.88rem; color: var(--blue); font-weight: 500;
+    }
+    .modal-backdrop {
+      position: fixed; inset: 0; background: rgba(1,4,9,0.8); backdrop-filter: blur(8px);
+      display: none; align-items: center; justify-content: center; padding: 20px; z-index: 50;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal {
+      width: 100%; max-width: 500px; background: var(--surface); border: 1px solid var(--border);
+      border-radius: 18px; padding: 28px; position: relative;
+    }
+    .modal-close {
+      position: absolute; top: 16px; right: 16px; background: transparent; border: 1px solid var(--border);
+      color: var(--muted); width: 32px; height: 32px; border-radius: 8px; font-size: 1.2rem; cursor: pointer;
+    }
+    .modal-header { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; padding-right: 36px; }
+    .modal-header img { width: 68px; height: 68px; border-radius: 16px; border: 1px solid var(--border); object-fit: cover; }
+    .modal-tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 22px; }
+    .tag { font-size: 0.78rem; padding: 4px 10px; border-radius: 6px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--muted); }
+    .modal-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+    .btn {
+      flex: 1; min-width: 160px; display: inline-flex; align-items: center; justify-content: center;
+      padding: 11px 16px; border-radius: 10px; font-size: 0.94rem; font-weight: 600; text-decoration: none;
+    }
+    .btn-primary { background: var(--green); color: #fff; }
+    .btn-secondary { background: rgba(88,166,255,0.1); color: var(--blue); border: 1px solid rgba(88,166,255,0.35); }
+    footer {
+      max-width: 1040px; margin: 0 auto; padding: 28px 24px 48px; border-top: 1px solid var(--border);
+      display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; color: var(--muted); font-size: 0.88rem;
+    }
+    footer a { color: var(--blue); text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="space-bg"></div>
+  <canvas id="starfield"></canvas>
+
+  <header>
+    <div class="nav-inner">
+      <a class="brand" href="/"><span class="brand-orbit">A</span><span>Anteractive.io</span></a>
+      <nav class="nav-menu" id="navMenu">
+        <a class="nav-link" href="mailto:support.anteractive@gmail.com">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="badge"><span class="badge-dot"></span>Independent Mobile Studio</div>
+      <h1>Building Playful Worlds &amp; Interactive Apps</h1>
+      <p>Welcome to Anteractive. Explore our launched games, upcoming projects, and app privacy policies.</p>
+    </section>
+    <div class="section-title">Launched &amp; Upcoming Apps</div>
+    <section class="apps-grid" id="appsGrid"></section>
+  </main>
+
+  <footer>
+    <span>&copy; 2026 Anteractive. All rights reserved.</span>
+    <span>Support: <a href="mailto:support.anteractive@gmail.com">support.anteractive@gmail.com</a></span>
+  </footer>
+
+  <div class="modal-backdrop" id="appModal">
+    <div class="modal">
+      <button class="modal-close" id="closeModal">&times;</button>
+      <div class="modal-header">
+        <img id="modalIcon" src="" alt="" />
+        <div>
+          <h2 id="modalTitle" style="font-size:1.35rem;margin-bottom:4px;"></h2>
+          <span class="status-pill" id="modalStatus"></span>
+        </div>
+      </div>
+      <p id="modalDesc" style="color:var(--muted);font-size:0.95rem;"></p>
+      <div class="modal-tags" id="modalTags"></div>
+      <div class="modal-actions">
+        <a id="modalPlayBtn" class="btn btn-primary" href="#" target="_blank" rel="noopener noreferrer">Get on Google Play</a>
+        <a id="modalPrivacyBtn" class="btn btn-secondary" href="#">Privacy Policy</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const APPS = [
+      {
+        name: "Talking Indie",
+        status: "Live on Android",
+        logo: "talking-indie/app_icon.png",
+        shortDesc: "Your playful 3D virtual puppy! Talk, feed, dance, and play mini-games together.",
+        fullDesc: "Talking Indie is an interactive 3D virtual pet experience where Indie repeats your speech in a stylized voice, dances, plays with quirky gadgets, and unlocks rewards through mini-games.",
+        tags: ["3D Virtual Pet", "Real-Time Voice", "Mini-Games", "Family Friendly"],
+        playStoreUrl: "https://play.google.com/store/apps/details?id=com.anteractive.talkingindie",
+        privacyUrl: "/talking-indie/privacy-policy.html"
+      }
+    ];
+
+    const navMenu = document.getElementById("navMenu");
+    const appsGrid = document.getElementById("appsGrid");
+    const modal = document.getElementById("appModal");
+
+    APPS.forEach((app) => {
+      const navBtn = document.createElement("button");
+      navBtn.className = "nav-app-btn";
+      navBtn.innerHTML = `<img src="${app.logo}" alt="${app.name}" /><span>${app.name}</span>`;
+      navBtn.onclick = () => openModal(app);
+      navMenu.insertBefore(navBtn, navMenu.firstChild);
+
+      const card = document.createElement("article");
+      card.className = "app-card";
+      card.innerHTML = `
+        <div class="app-card-header">
+          <img class="app-icon" src="${app.logo}" alt="${app.name}" />
+          <div><h3>${app.name}</h3><span class="status-pill">${app.status}</span></div>
+        </div>
+        <p class="app-desc">${app.shortDesc}</p>
+        <div class="card-footer"><span>View details &amp; Privacy Policy</span><span>&rarr;</span></div>`;
+      card.onclick = () => openModal(app);
+      appsGrid.appendChild(card);
+    });
+
+    const upcoming = document.createElement("article");
+    upcoming.className = "app-card upcoming";
+    upcoming.innerHTML = `
+      <div class="app-card-header">
+        <div class="app-icon" style="display:grid;place-items:center;font-size:1.5rem;">&#10024;</div>
+        <div><h3>Next Launch</h3><span class="status-pill soon">In Development</span></div>
+      </div>
+      <p class="app-desc">New physics puzzles and multiplayer experiences are currently cooking in the Anteractive lab.</p>`;
+    appsGrid.appendChild(upcoming);
+
+    function openModal(app) {
+      document.getElementById("modalIcon").src = app.logo;
+      document.getElementById("modalTitle").textContent = app.name;
+      document.getElementById("modalStatus").textContent = app.status;
+      document.getElementById("modalDesc").textContent = app.fullDesc;
+      document.getElementById("modalPlayBtn").href = app.playStoreUrl;
+      document.getElementById("modalPrivacyBtn").href = app.privacyUrl;
+      document.getElementById("modalTags").innerHTML = app.tags.map(t => `<span class="tag">${t}</span>`).join("");
+      modal.classList.add("open");
     }
 
-    .nav-inner {
-      max-width: 1040px;
-      margin: 0 auto;
-      padding: 14px 24px;
-      display: flex;
-      align-items: center;
+    document.getElementById("closeModal").onclick = () => modal.classList.remove("open");
+    modal.onclick = (e) => { if (e.target === modal) modal.classList.remove("open"); };
+
+    const canvas = document.getElementById("starfield");
+    const ctx = canvas.getContext("2d");
+    let stars = [];
+    function resize() {
+      canvas.width = innerWidth; canvas.height = innerHeight;
+      stars = Array.from({ length: 80 }, () => ({
+        x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+        r: Math.random() * 1.4 + 0.3, a: Math.random() * 0.7 + 0.2,
+        s: Math.random() * 0.006 + 0.002, p: Math.random() * 6.28
+      }));
+    }
+    function draw(t) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (const s of stars) {
+        ctx.fillStyle = `rgba(240,246,252,${s.a * (0.4 + 0.6 * Math.sin(t * s.s + s.p))})`;
+        ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, 6.28); ctx.fill();
+      }
+      requestAnimationFrame(draw);
+    }
+    addEventListener("resize", resize); resize(); requestAnimationFrame(draw);
+  </script>
+</body>
+</html>
