@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Anteractive.io — Interactive Mobile Games & Apps</title>
+  <style>
+    :root {
+      --bg-deep: #0d1117;
+      --bg-surface: #161b22;
+      --bg-glass: rgba(22, 27, 34, 0.72);
+      --border: #30363d;
+      --border-glow: rgba(88, 166, 255, 0.45);
+      --text-primary: #f0f6fc;
+      --text-secondary: #8b949e;
+      --accent-blue: #58a6ff;
+      --accent-purple: #a371f7;
+      --accent-green: #238636;
+      --accent-green-hover: #2ea043;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+      background-color: var(--bg-deep);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* Space Nebula & Starfield Background */
+    .space-bg {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      background:
+        radial-gradient(ellipse 80% 50% at 20% -10%, rgba(163, 113, 247, 0.22), transparent 60%),
+        radial-gradient(ellipse 65% 45% at 85% 15%, rgba(88, 166, 255, 0.18), transparent 55%),
+        radial-gradient(ellipse 50% 40% at 50% 100%, rgba(35, 134, 54, 0.12), transparent 60%),
+        var(--bg-deep);
+    }
+
+    #starfield {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* Navigation Bar */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      background: rgba(13, 17, 23, 0.78);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text-primary);
+      font-weight: 700;
+      font-size: 1.15rem;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-orbit {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+      display: grid;
+      place-items: center;
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: #fff;
+      box-shadow: 0 0 16px rgba(163, 113, 247, 0.45);
+    }
+
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .nav-app-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px 6px 8px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s, transform 0.15s;
+    }
+
+    .nav-app-btn:hover {
+      border-color: var(--accent-blue);
+      background: rgba(88, 166, 255, 0.12);
+      transform: translateY(-1px);
+    }
+
+    .nav-app-btn img {
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      object-fit: cover;
+    }
+
+    .nav-link {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      padding: 6px 12px;
+      border-radius: 8px;
+      transition: color 0.2s, background 0.2s;
+    }
+
+    .nav-link:hover {
+      color: var(--text-primary);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    /* Main Container */
+    main {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 68px 24px 80px;
+    }
+
+    /* Hero */
+    .hero {
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto 64px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 14px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      color: var(--accent-blue);
+      background: rgba(88, 166, 255, 0.1);
+      border: 1px solid rgba(88, 166, 255, 0.3);
+      margin-bottom: 20px;
+    }
+
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #3fb950;
+      box-shadow: 0 0 8px #3fb950;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.2rem, 5vw, 3.4rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 16px;
+      background: linear-gradient(120deg, #ffffff 30%, #a371f7 70%, #58a6ff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      font-size: 1.08rem;
+      color: var(--text-secondary);
+    }
+
+    /* Section Header */
+    .section-title {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-title::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--border), transparent);
+    }
+
+    /* App Cards Grid */
+    .apps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .app-card {
+      background: var(--bg-glass);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      cursor: pointer;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .app-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--border-glow);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45), 0 0 24px rgba(88, 166, 255, 0.12);
+    }
+
+    .app-card-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .app-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 16px;
+      object-fit: cover;
+      border: 1px solid var(--border);
+      background: #0d1117;
+      flex-shrink: 0;
+    }
+
+    .app-meta h3 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .status-pill {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 2px 10px;
+      border-radius: 999px;
+      background: rgba(63, 185, 80, 0.15);
+      color: #3fb950;
+      border: 1px solid rgba(63, 185, 80, 0.35);
+    }
+
+    .status-pill.soon {
+      background: rgba(163, 113, 247, 0.12);
+      color: #d2a8ff;
+      border-color: rgba(163, 113, 247, 0.35);
+    }
+
+    .app-desc {
+      color: var(--text-secondary);
+      font-size: 0.94rem;
+      flex: 1;
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 12px;
+      border-top: 1px solid rgba(48, 54, 61, 0.7);
+      font-size: 0.88rem;
+      color: var(--accent-blue);
+      font-weight: 500;
+    }
+
+    .app-card.upcoming {
+      cursor: default;
+      border-style: dashed;
+      opacity: 0.72;
+    }
+
+    .app-card.upcoming:hover {
+      transform: none;
+      border-color: var(--border);
+      box-shadow: none;
+    }
+
+    /* Modal (App Details + Privacy Policy Button) */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(1, 4, 9, 0.78);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 50;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+      animation: fadeIn 0.18s ease-out;
+    }
+
+    .modal {
+      width: 100%;
+      max-width: 520px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 28px;
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.65), 0 0 40px rgba(163, 113, 247, 0.12);
+      position: relative;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      transition: color 0.15s, border-color 0.15s;
+    }
+
+    .modal-close:hover {
+      color: var(--text-primary);
+      border-color: var(--text-secondary);
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 18px;
+      padding-right: 36px;
+    }
+
+    .modal-header img {
+      width: 72px;
+      height: 72px;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      object-fit: cover;
+    }
+
+    .modal-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 16px 0 24px;
+    }
+
+    .tag {
+      font-size: 0.78rem;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+    }
+
+    .modal-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .btn {
+      flex: 1;
+      min-width: 170px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 11px 18px;
+      border-radius: 10px;
+      font-size: 0.94rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.18s, border-color 0.18s, transform 0.15s;
+    }
+
+    .btn-primary {
+      background: var(--accent-green);
+      color: #fff;
+      border: 1px solid rgba(240, 246, 252, 0.12);
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-green-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: rgba(88, 166, 255, 0.1);
+      color: var(--accent-blue);
+      border: 1px solid rgba(88, 166, 255, 0.35);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(88, 166, 255, 0.18);
+      border-color: var(--accent-blue);
+      transform: translateY(-1px);
+    }
+
+    /* Footer */
+    footer {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 28px 24px 48px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      color: var(--text-secondary);
+      font-size: 0.88rem;
+    }
+
+    footer a {
+      color: var(--accent-blue);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="space-bg"></div>
+  <canvas id="starfield"></canvas>
+
+  <header>
+    <div class="nav-inner">
+      <a class="brand" href="/">
+        <span class="brand-orbit">A</span>
+        <span>Anteractive.io</span>
+      </a>
+      <nav class="nav-menu" id="navMenu">
+        <!-- App menu items injected from APPS array -->
+        <a class="nav-link" href="mailto:support.anteractive@gmail.com">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="badge">
+        <span class="badge-dot"></span>
+        Independent Mobile Studio
+      </div>
+      <h1>Building Playful Worlds &amp; Interactive Apps</h1>
+      <p>
+        Welcome to Anteractive. Explore our launched games, upcoming projects, and app privacy policies.
+      </p>
+    </section>
+
+    <div class="section-title">Launched &amp; Upcoming Apps</div>
+    <section class="apps-grid" id="appsGrid"></section>
+  </main>
+
+  <footer>
+    <span>&copy; 2026 Anteractive. All rights reserved.</span>
+    <span>Support: <a href="mailto:support.anteractive@gmail.com">support.anteractive@gmail.com</a></span>
+  </footer>
+
+  <!-- App Details Modal -->
+  <div class="modal-backdrop" id="appModal" role="dialog" aria-modal="true">
+    <div class="modal">
+      <button class="modal-close" id="closeModal" aria-label="Close">&times;</button>
+      <div class="modal-header">
+        <img id="modalIcon" src="" alt="" />
+        <div>
+          <h2 id="modalTitle" style="font-size: 1.4rem; margin-bottom: 4px;"></h2>
+          <span class="status-pill" id="modalStatus"></span>
+        </div>
+      </div>
+      <p id="modalDesc" style="color: var(--text-secondary); font-size: 0.96rem;"></p>
+      <div class="modal-tags" id="modalTags"></div>
+      <div class="modal-actions">
+        <a id="modalPlayBtn" class="btn btn-primary" href="#" target="_blank" rel="noopener noreferrer">
+          Get on Google Play
+        </a>
+        <a id="modalPrivacyBtn" class="btn btn-secondary" href="#">
+          Privacy Policy
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Fallback SVG icon if logo.png hasn't been uploaded yet
+    const FALLBACK_ICON = "data:image/svg+xml;utf8," + encodeURIComponent(
+      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+        <rect width="100" height="100" rx="22" fill="#1f2937"/>
+        <text x="50%" y="56%" dominant-baseline="middle" text-anchor="middle" font-size="48">🐶</text>
+      </svg>`
+    );
+
+    // Add new apps here as you launch them!
+    const APPS = [
+      {
+        id: "talking-indie",
+        name: "Talking Indie",
+        status: "Live on Android",
+        logo: "talking-indie/logo.png",
+        shortDesc: "Your playful 3D virtual puppy! Talk, feed, dance, and play mini-games together.",
+        fullDesc: "Talking Indie is an interactive 3D virtual pet experience where Indie repeats your speech in a fun stylized voice, dances, plays with quirky gadgets, and unlocks rewards through mini-games.",
+        tags: ["3D Virtual Pet", "Real-Time Voice", "Mini-Games", "Family Friendly"],
+        playStoreUrl: "https://play.google.com/store/apps/details?id=com.anteractive.talkingindie",
+        privacyUrl: "/talking-indie/privacy-policy.html"
+      }
+    ];
+
+    const navMenu = document.getElementById("navMenu");
+    const appsGrid = document.getElementById("appsGrid");
+    const modal = document.getElementById("appModal");
+
+    // Populate Navbar & App Cards
+    APPS.forEach((app) => {
+      // 1. Top Nav Menu Item with Logo
+      const navBtn = document.createElement("button");
+      navBtn.className = "nav-app-btn";
+      navBtn.innerHTML = `<img src="${app.logo}" alt="${app.name}" onerror="this.src='${FALLBACK_ICON}'" /><span>${app.name}</span>`;
+      navBtn.addEventListener("click", () => openModal(app));
+      navMenu.insertBefore(navBtn, navMenu.firstChild);
+
+      // 2. App Grid Card
+      const card = document.createElement("article");
+      card.className = "app-card";
+      card.innerHTML = `
+        <div class="app-card-header">
+          <img class="app-icon" src="${app.logo}" alt="${app.name}" onerror="this.src='${FALLBACK_ICON}'" />
+          <div class="app-meta">
+            <h3>${app.name}</h3>
+            <span class="status-pill">${app.status}</span>
+          </div>
+        </div>
+        <p class="app-desc">${app.shortDesc}</p>
+        <div class="card-footer">
+          <span>View details &amp; Privacy Policy</span>
+          <span>&rarr;</span>
+        </div>
+      `;
+      card.addEventListener("click", () => openModal(app));
+      appsGrid.appendChild(card);
+    });
+
+    // Upcoming Placeholder Card
+    const upcomingCard = document.createElement("article");
+    upcomingCard.className = "app-card upcoming";
+    upcomingCard.innerHTML = `
+      <div class="app-card-header">
+        <div class="app-icon" style="display:grid;place-items:center;font-size:1.6rem;">&#10024;</div>
+        <div class="app-meta">
+          <h3>Next Launch</h3>
+          <span class="status-pill soon">In Development</span>
+        </div>
+      </div>
+      <p class="app-desc">New physics puzzles and multiplayer experiences are currently cooking in the Anteractive lab.</p>
+    `;
+    appsGrid.appendChild(upcomingCard);
+
+    // Modal Logic
+    function openModal(app) {
+      const icon = document.getElementById("modalIcon");
+      icon.src = app.logo;
+      icon.alt = app.name;
+      icon.onerror = () => { icon.src = FALLBACK_ICON; };
+
+      document.getElementById("modalTitle").textContent = app.name;
+      document.getElementById("modalStatus").textContent = app.status;
+      document.getElementById("modalDesc").textContent = app.fullDesc;
+      document.getElementById("modalPlayBtn").href = app.playStoreUrl;
+      document.getElementById("modalPrivacyBtn").href = app.privacyUrl;
+
+      const tagsEl = document.getElementById("modalTags");
+      tagsEl.innerHTML = app.tags.map(t => `<span class="tag">${t}</span>`).join("");
+
+      modal.classList.add("open");
+    }
+
+    function closeModal() {
+      modal.classList.remove("open");
+    }
+
+    document.getElementById("closeModal").addEventListener("click", closeModal);
+    modal.addEventListener("click", (e) => { if (e.target === modal) closeModal(); });
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
+
+    // Subtle Animated Starfield
+    const canvas = document.getElementById("starfield");
+    const ctx = canvas.getContext("2d");
+    let stars = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      stars = Array.from({ length: 90 }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 1.4 + 0.3,
+        alpha: Math.random() * 0.7 + 0.2,
+        speed: Math.random() * 0.008 + 0.002,
+        phase: Math.random() * Math.PI * 2
+      }));
+    }
+
+    function drawStars(time) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (const s of stars) {
+        const twinkle = 0.4 + 0.6 * Math.sin(time * s.speed + s.phase);
+        ctx.fillStyle = `rgba(240, 246, 252, ${s.alpha * twinkle})`;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      requestAnimationFrame(drawStars);
+    }
+
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+    requestAnimationFrame(drawStars);
+  </script>
+</body>
+</html>
