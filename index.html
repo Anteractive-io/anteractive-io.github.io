@@ -7,137 +7,170 @@
   <link rel="icon" type="image/png" href="talking-indie/app_icon.png" />
   <style>
     :root {
-      --bg: #090c12; --surface: #161b22; --glass: rgba(22,27,34,0.72);
-      --border: #30363d; --text: #f0f6fc; --muted: #8b949e;
-      --blue: #58a6ff; --purple: #a371f7; --cyan: #39d0d8; --green: #238636;
+      --bg-deep: #040d21;
+      --bg-mid: #0a1938;
+      --surface: #0d1629;
+      --glass: rgba(13, 22, 41, 0.72);
+      --border: rgba(121, 184, 255, 0.18);
+      --text: #ffffff;
+      --muted: #8b9bb4;
+      --blue: #58a6ff;
+      --cyan: #39d0d8;
+      --green: #2ea44f;
+      --green-hover: #3fb950;
     }
     html, * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-      background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; line-height: 1.6;
+      background: radial-gradient(circle at 72% 32%, #112b5e 0%, var(--bg-deep) 62%);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.6;
     }
 
-    /* Deep Space Nebula */
-    .space-bg {
-      position: fixed; inset: 0; z-index: -3;
-      background:
-        radial-gradient(ellipse 75% 55% at 88% 12%, rgba(163,113,247,0.28), transparent 60%),
-        radial-gradient(ellipse 65% 45% at 15% 20%, rgba(57,208,216,0.16), transparent 55%),
-        radial-gradient(ellipse 55% 45% at 75% 85%, rgba(88,166,255,0.16), transparent 60%),
-        var(--bg);
-    }
-    #starfield { position: fixed; inset: 0; z-index: -2; pointer-events: none; }
-
-    /* Floating Side Space Scene (Right Side) */
-    .space-actors {
-      position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden;
-    }
-    .moon {
-      position: absolute; top: 76px; right: 4%; width: 130px; height: 130px; border-radius: 50%;
-      background: radial-gradient(circle at 35% 35%, #ffffff 0%, #f3e8ff 45%, #c084fc 100%);
-      box-shadow: 0 0 60px rgba(192,132,252,0.55), 0 0 120px rgba(163,113,247,0.3);
-      opacity: 0.9;
-    }
-    .astro-wrap {
-      position: absolute; top: 200px; right: 5%; width: 145px;
-      filter: drop-shadow(0 0 18px rgba(57,208,216,0.45)) drop-shadow(-8px 0 16px rgba(163,113,247,0.45));
-      animation: floatWander 11s ease-in-out infinite;
-    }
-    .ufo-wrap {
-      position: absolute; bottom: 14%; right: 9%; width: 72px;
-      filter: drop-shadow(0 0 12px rgba(88,166,255,0.5));
-      animation: driftSide 15s ease-in-out infinite;
-    }
-    @keyframes floatWander {
-      0%, 100% { transform: translate(0, 0) rotate(-4deg); }
-      25% { transform: translate(-22px, -28px) rotate(5deg); }
-      50% { transform: translate(12px, -45px) rotate(-2deg); }
-      75% { transform: translate(-18px, -14px) rotate(6deg); }
-    }
-    @keyframes driftSide {
-      0%, 100% { transform: translate(0, 0) rotate(-8deg); }
-      33% { transform: translate(-45px, -24px) rotate(6deg); }
-      66% { transform: translate(18px, -38px) rotate(-5deg); }
-    }
-    @media (max-width: 900px) {
-      .moon { width: 80px; height: 80px; opacity: 0.45; }
-      .astro-wrap { width: 95px; right: 2%; opacity: 0.45; }
-      .ufo-wrap { width: 52px; opacity: 0.4; }
-    }
+    #starfield { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
 
     /* Header */
     header {
-      position: sticky; top: 0; z-index: 20; backdrop-filter: blur(14px);
-      background: rgba(9,12,18,0.78); border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; z-index: 20;
+      backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      background: rgba(4, 13, 33, 0.75);
+      border-bottom: 1px solid var(--border);
     }
     .nav-inner {
-      max-width: 1040px; margin: 0 auto; padding: 14px 24px;
+      max-width: 1140px; margin: 0 auto; padding: 14px 24px;
       display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
     }
-    .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text); font-weight: 700; font-size: 1.15rem; }
+    .brand {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none; color: var(--text); font-weight: 700; font-size: 1.15rem;
+    }
     .brand-orbit {
       width: 28px; height: 28px; border-radius: 8px; display: grid; place-items: center;
-      background: linear-gradient(135deg, var(--purple), var(--cyan)); font-weight: 800; color: #fff;
-      box-shadow: 0 0 14px rgba(163,113,247,0.5);
+      background: linear-gradient(135deg, #2563eb, #39d0d8); font-weight: 800; color: #fff;
+      box-shadow: 0 0 16px rgba(57, 208, 216, 0.45);
     }
     .nav-menu { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
     .nav-app-btn {
       display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px 6px 8px;
-      background: rgba(255,255,255,0.06); border: 1px solid var(--border); border-radius: 999px;
-      color: var(--text); font-size: 0.9rem; font-weight: 500; cursor: pointer;
+      background: rgba(255, 255, 255, 0.06); border: 1px solid var(--border); border-radius: 999px;
+      color: var(--text); font-size: 0.9rem; font-weight: 500; cursor: pointer; transition: 0.2s;
     }
-    .nav-app-btn:hover { border-color: var(--cyan); background: rgba(57,208,216,0.14); }
+    .nav-app-btn:hover { border-color: var(--blue); background: rgba(88, 166, 255, 0.16); }
     .nav-app-btn img { width: 22px; height: 22px; border-radius: 6px; object-fit: cover; }
     .nav-link { color: var(--muted); text-decoration: none; font-size: 0.9rem; padding: 6px 12px; }
     .nav-link:hover { color: var(--text); }
 
-    /* Content */
-    main { max-width: 1040px; margin: 0 auto; padding: 64px 24px 80px; position: relative; z-index: 1; }
-    .hero { text-align: center; max-width: 680px; margin: 0 auto 60px; }
-    .badge {
-      display: inline-flex; align-items: center; gap: 8px; padding: 5px 14px; border-radius: 999px;
-      font-size: 0.82rem; color: var(--cyan); background: rgba(57,208,216,0.1);
-      border: 1px solid rgba(57,208,216,0.3); margin-bottom: 18px;
+    /* Main Layout */
+    main { max-width: 1140px; margin: 0 auto; padding: 40px 24px 80px; }
+
+    /* GitHub-Style Split Hero */
+    .hero-split {
+      display: grid;
+      grid-template-columns: 1.05fr 1fr;
+      align-items: center;
+      gap: 24px;
+      min-height: 520px;
+      margin-bottom: 56px;
     }
-    .badge-dot { width: 7px; height: 7px; border-radius: 50%; background: #3fb950; box-shadow: 0 0 8px #3fb950; }
-    .hero h1 {
-      font-size: clamp(2.1rem, 5vw, 3.2rem); font-weight: 800; line-height: 1.15; margin-bottom: 14px;
-      background: linear-gradient(120deg, #fff 25%, #c084fc 65%, #39d0d8 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    .hero-text { z-index: 2; }
+    .hero-text h1 {
+      font-size: clamp(2.4rem, 5vw, 3.8rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 20px;
+      color: #ffffff;
     }
-    .hero p { color: var(--muted); font-size: 1.05rem; }
-    .section-title { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 20px; }
+    .hero-text p {
+      font-size: 1.12rem;
+      color: var(--muted);
+      max-width: 500px;
+      margin-bottom: 30px;
+    }
+    .hero-cta { display: flex; flex-wrap: wrap; gap: 12px; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 12px 22px; border-radius: 8px; font-size: 0.96rem; font-weight: 600;
+      text-decoration: none; cursor: pointer; border: none; transition: 0.2s;
+    }
+    .btn-primary { background: var(--green); color: #fff; }
+    .btn-primary:hover { background: var(--green-hover); transform: translateY(-1px); }
+    .btn-secondary {
+      background: rgba(88, 166, 255, 0.12); color: var(--blue);
+      border: 1px solid rgba(88, 166, 255, 0.35);
+    }
+    .btn-secondary:hover { background: rgba(88, 166, 255, 0.22); border-color: var(--blue); }
+
+    /* 3D Globe Container */
+    .globe-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      max-width: 540px;
+      margin: 0 auto;
+      display: grid;
+      place-items: center;
+    }
+    #globeCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    @media (max-width: 860px) {
+      .hero-split { grid-template-columns: 1fr; text-align: center; min-height: auto; }
+      .hero-text p { margin: 0 auto 24px; }
+      .hero-cta { justify-content: center; }
+      .globe-wrap { max-width: 360px; }
+    }
+
+    /* Apps Section */
+    .section-title {
+      font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.14em;
+      color: var(--muted); margin-bottom: 20px; display: flex; align-items: center; gap: 12px;
+    }
+    .section-title::after {
+      content: ""; flex: 1; height: 1px;
+      background: linear-gradient(90deg, var(--border), transparent);
+    }
     .apps-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
     .app-card {
-      background: var(--glass); backdrop-filter: blur(10px); border: 1px solid var(--border);
-      border-radius: 16px; padding: 24px; cursor: pointer; display: flex; flex-direction: column;
-      gap: 16px; transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+      background: var(--glass); backdrop-filter: blur(10px);
+      border: 1px solid var(--border); border-radius: 14px; padding: 24px;
+      cursor: pointer; display: flex; flex-direction: column; gap: 16px;
+      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
     }
-    .app-card:hover { transform: translateY(-4px); border-color: var(--cyan); box-shadow: 0 12px 30px rgba(0,0,0,0.45); }
-    .app-card.upcoming { cursor: default; border-style: dashed; opacity: 0.72; }
+    .app-card:hover {
+      transform: translateY(-4px); border-color: var(--blue);
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.45), 0 0 24px rgba(88, 166, 255, 0.14);
+    }
+    .app-card.upcoming { cursor: default; border-style: dashed; opacity: 0.7; }
     .app-card.upcoming:hover { transform: none; border-color: var(--border); box-shadow: none; }
     .app-card-header { display: flex; align-items: center; gap: 16px; }
-    .app-icon { width: 64px; height: 64px; border-radius: 16px; object-fit: cover; border: 1px solid var(--border); flex-shrink: 0; }
+    .app-icon { width: 62px; height: 62px; border-radius: 15px; object-fit: cover; border: 1px solid var(--border); flex-shrink: 0; }
     .status-pill {
       display: inline-block; font-size: 0.75rem; font-weight: 600; padding: 2px 10px; border-radius: 999px;
-      background: rgba(63,185,80,0.15); color: #3fb950; border: 1px solid rgba(63,185,80,0.35);
+      background: rgba(46, 164, 79, 0.18); color: #3fb950; border: 1px solid rgba(63, 185, 80, 0.35);
     }
-    .status-pill.soon { background: rgba(163,113,247,0.12); color: #d2a8ff; border-color: rgba(163,113,247,0.35); }
+    .status-pill.soon { background: rgba(88, 166, 255, 0.12); color: var(--blue); border-color: rgba(88, 166, 255, 0.35); }
     .app-desc { color: var(--muted); font-size: 0.94rem; flex: 1; }
     .card-footer {
       display: flex; justify-content: space-between; padding-top: 12px;
-      border-top: 1px solid var(--border); font-size: 0.88rem; color: var(--cyan); font-weight: 500;
+      border-top: 1px solid var(--border); font-size: 0.88rem; color: var(--blue); font-weight: 500;
     }
 
     /* Modal */
     .modal-backdrop {
-      position: fixed; inset: 0; background: rgba(1,4,9,0.82); backdrop-filter: blur(8px);
+      position: fixed; inset: 0; background: rgba(2, 6, 18, 0.82); backdrop-filter: blur(8px);
       display: none; align-items: center; justify-content: center; padding: 20px; z-index: 50;
     }
     .modal-backdrop.open { display: flex; }
     .modal {
       width: 100%; max-width: 500px; background: var(--surface); border: 1px solid var(--border);
-      border-radius: 18px; padding: 28px; position: relative;
+      border-radius: 16px; padding: 28px; position: relative;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65);
     }
     .modal-close {
       position: absolute; top: 16px; right: 16px; background: transparent; border: 1px solid var(--border);
@@ -148,79 +181,17 @@
     .modal-tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 22px; }
     .tag { font-size: 0.78rem; padding: 4px 10px; border-radius: 6px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--muted); }
     .modal-actions { display: flex; flex-wrap: wrap; gap: 12px; }
-    .btn {
-      flex: 1; min-width: 160px; display: inline-flex; align-items: center; justify-content: center;
-      padding: 11px 16px; border-radius: 10px; font-size: 0.94rem; font-weight: 600; text-decoration: none;
-    }
-    .btn-primary { background: var(--green); color: #fff; }
-    .btn-secondary { background: rgba(57,208,216,0.12); color: var(--cyan); border: 1px solid rgba(57,208,216,0.35); }
+    .modal-actions .btn { flex: 1; min-width: 160px; }
+
     footer {
-      max-width: 1040px; margin: 0 auto; padding: 28px 24px 48px; border-top: 1px solid var(--border);
+      max-width: 1140px; margin: 0 auto; padding: 28px 24px 48px; border-top: 1px solid var(--border);
       display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; color: var(--muted); font-size: 0.88rem;
     }
-    footer a { color: var(--cyan); text-decoration: none; }
+    footer a { color: var(--blue); text-decoration: none; }
   </style>
 </head>
 <body>
-  <div class="space-bg"></div>
   <canvas id="starfield"></canvas>
-
-  <!-- Floating Space Characters on Right Side -->
-  <div class="space-actors" aria-hidden="true">
-    <div class="moon"></div>
-
-    <!-- Cute Neon Chibi Astronaut -->
-    <div class="astro-wrap">
-      <svg viewBox="0 0 180 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="suitGrad" x1="20" y1="20" x2="160" y2="180" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="#c084fc"/>
-            <stop offset="50%" stop-color="#334155"/>
-            <stop offset="100%" stop-color="#22d3ee"/>
-          </linearGradient>
-          <radialGradient id="visorGrad" cx="45%" cy="40%" r="60%">
-            <stop offset="0%" stop-color="#a855f7"/>
-            <stop offset="65%" stop-color="#4c1d95"/>
-            <stop offset="100%" stop-color="#22d3ee"/>
-          </radialGradient>
-        </defs>
-        <!-- Jetpack -->
-        <rect x="34" y="102" width="24" height="44" rx="10" fill="#475569" stroke="#a855f7" stroke-width="2.5"/>
-        <!-- Body -->
-        <rect x="52" y="104" width="76" height="58" rx="24" fill="url(#suitGrad)" stroke="#38bdf8" stroke-width="2.5"/>
-        <!-- Chest Panel -->
-        <rect x="74" y="118" width="32" height="22" rx="6" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
-        <rect x="81" y="124" width="10" height="10" rx="3" fill="#fb923c"/>
-        <circle cx="98" cy="129" r="3" fill="#38bdf8"/>
-        <!-- Arms -->
-        <path d="M54 118 C36 122, 32 138, 42 146" stroke="url(#suitGrad)" stroke-width="15" stroke-linecap="round"/>
-        <path d="M126 118 C144 124, 146 140, 136 148" stroke="url(#suitGrad)" stroke-width="15" stroke-linecap="round"/>
-        <!-- Legs -->
-        <rect x="62" y="152" width="22" height="28" rx="11" fill="url(#suitGrad)" stroke="#a855f7" stroke-width="2"/>
-        <rect x="96" y="152" width="22" height="28" rx="11" fill="url(#suitGrad)" stroke="#22d3ee" stroke-width="2"/>
-        <!-- Helmet -->
-        <circle cx="90" cy="68" r="46" fill="url(#suitGrad)" stroke="#38bdf8" stroke-width="3"/>
-        <ellipse cx="92" cy="72" rx="33" ry="26" fill="url(#visorGrad)" stroke="#0f172a" stroke-width="4"/>
-        <!-- Happy Face -->
-        <path d="M76 72 Q81 66 86 72" stroke="#0f172a" stroke-width="4" stroke-linecap="round"/>
-        <path d="M100 72 Q105 66 110 72" stroke="#0f172a" stroke-width="4" stroke-linecap="round"/>
-        <path d="M89 79 Q93 84 97 79" stroke="#0f172a" stroke-width="3.5" stroke-linecap="round"/>
-        <!-- Helmet Top Detail -->
-        <rect x="78" y="26" width="24" height="10" rx="5" fill="#1e293b" stroke="#c084fc" stroke-width="2"/>
-      </svg>
-    </div>
-
-    <!-- Drifting Mini UFO -->
-    <div class="ufo-wrap">
-      <svg viewBox="0 0 100 70" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <ellipse cx="50" cy="40" rx="38" ry="13" fill="#1e293b" stroke="#38bdf8" stroke-width="2.5"/>
-        <path d="M30 35 C30 16, 70 16, 70 35" fill="#a855f7" fill-opacity="0.55" stroke="#c084fc" stroke-width="2.5"/>
-        <circle cx="30" cy="41" r="3" fill="#22d3ee"/>
-        <circle cx="50" cy="44" r="3" fill="#f472b6"/>
-        <circle cx="70" cy="41" r="3" fill="#22d3ee"/>
-      </svg>
-    </div>
-  </div>
 
   <header>
     <div class="nav-inner">
@@ -232,12 +203,24 @@
   </header>
 
   <main>
-    <section class="hero">
-      <div class="badge"><span class="badge-dot"></span>Independent Mobile Studio</div>
-      <h1>Building Playful Worlds &amp; Interactive Apps</h1>
-      <p>Welcome to Anteractive. Explore our launched games, upcoming projects, and app privacy policies.</p>
+    <section class="hero-split">
+      <div class="hero-text">
+        <h1>Where playful worlds come alive</h1>
+        <p>
+          Anteractive is an independent mobile studio crafting interactive 3D pets, physics puzzles, and multiplayer games for players everywhere.
+        </p>
+        <div class="hero-cta">
+          <button class="btn btn-primary" id="heroExploreBtn">Explore Talking Indie</button>
+          <a class="btn btn-secondary" href="#appsSection">All Apps &amp; Policies</a>
+        </div>
+      </div>
+
+      <div class="globe-wrap">
+        <canvas id="globeCanvas"></canvas>
+      </div>
     </section>
-    <div class="section-title">Launched &amp; Upcoming Apps</div>
+
+    <div class="section-title" id="appsSection">Launched &amp; Upcoming Apps</div>
     <section class="apps-grid" id="appsGrid"></section>
   </main>
 
@@ -313,6 +296,8 @@
       <p class="app-desc">New physics puzzles and multiplayer experiences are currently cooking in the Anteractive lab.</p>`;
     appsGrid.appendChild(upcoming);
 
+    document.getElementById("heroExploreBtn").onclick = () => openModal(APPS[0]);
+
     function openModal(app) {
       document.getElementById("modalIcon").src = app.logo;
       document.getElementById("modalTitle").textContent = app.name;
@@ -323,82 +308,152 @@
       document.getElementById("modalTags").innerHTML = app.tags.map(t => `<span class="tag">${t}</span>`).join("");
       modal.classList.add("open");
     }
-
     document.getElementById("closeModal").onclick = () => modal.classList.remove("open");
     modal.onclick = (e) => { if (e.target === modal) modal.classList.remove("open"); };
 
-    // Shiny Starfield + 4-Point Sparkles + Shooting Stars
-    const canvas = document.getElementById("starfield");
-    const ctx = canvas.getContext("2d");
-    const COLORS = ["#ffffff", "#e0f2fe", "#c084fc", "#67e8f9"];
-    let stars = [], shooters = [];
-
-    function resize() {
-      canvas.width = innerWidth; canvas.height = innerHeight;
-      stars = Array.from({ length: 180 }, () => ({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        r: Math.random() * 1.9 + 0.4,
-        c: COLORS[Math.floor(Math.random() * COLORS.length)],
-        sparkle: Math.random() > 0.86,
-        s: Math.random() * 0.005 + 0.002,
-        p: Math.random() * 6.28
+    /* 1. Shiny Starfield Background */
+    const sf = document.getElementById("starfield");
+    const sctx = sf.getContext("2d");
+    let stars = [];
+    function resizeStars() {
+      sf.width = innerWidth; sf.height = innerHeight;
+      stars = Array.from({ length: 140 }, () => ({
+        x: Math.random() * sf.width, y: Math.random() * sf.height,
+        r: Math.random() * 1.5 + 0.3, s: Math.random() * 0.004 + 0.001, p: Math.random() * 6.28
       }));
     }
-
-    function drawSparkle(x, y, size, color, alpha) {
-      ctx.save();
-      ctx.globalAlpha = alpha;
-      ctx.strokeStyle = color;
-      ctx.lineWidth = 1.2;
-      ctx.beginPath();
-      ctx.moveTo(x - size, y); ctx.lineTo(x + size, y);
-      ctx.moveTo(x, y - size); ctx.lineTo(x, y + size);
-      ctx.stroke();
-      ctx.restore();
-    }
-
-    function draw(t) {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
+    function drawStars(t) {
+      sctx.clearRect(0, 0, sf.width, sf.height);
       for (const s of stars) {
-        const glow = 0.25 + 0.75 * Math.abs(Math.sin(t * s.s + s.p));
-        ctx.save();
-        ctx.globalAlpha = glow;
-        ctx.fillStyle = s.c;
-        ctx.shadowBlur = s.sparkle ? 10 : 4;
-        ctx.shadowColor = s.c;
-        ctx.beginPath();
-        ctx.arc(s.x, s.y, s.r, 0, 6.28);
-        ctx.fill();
-        ctx.restore();
-        if (s.sparkle && glow > 0.6) drawSparkle(s.x, s.y, s.r * 3.5, s.c, glow * 0.85);
+        const a = 0.2 + 0.8 * Math.abs(Math.sin(t * s.s + s.p));
+        sctx.fillStyle = `rgba(200, 225, 255, ${a})`;
+        sctx.beginPath(); sctx.arc(s.x, s.y, s.r, 0, 6.28); sctx.fill();
       }
+      requestAnimationFrame(drawStars);
+    }
+    addEventListener("resize", resizeStars);
+    resizeStars();
+    requestAnimationFrame(drawStars);
 
-      // Occasional shooting star
-      if (Math.random() < 0.008 && shooters.length < 2) {
-        shooters.push({ x: Math.random() * canvas.width * 0.8, y: Math.random() * canvas.height * 0.35, vx: 9, vy: 4.5, life: 1 });
-      }
-      shooters = shooters.filter(sh => sh.life > 0);
-      for (const sh of shooters) {
-        ctx.save();
-        ctx.globalAlpha = sh.life;
-        ctx.strokeStyle = "#e0f2fe";
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.moveTo(sh.x, sh.y);
-        ctx.lineTo(sh.x - sh.vx * 6, sh.y - sh.vy * 6);
-        ctx.stroke();
-        ctx.restore();
-        sh.x += sh.vx; sh.y += sh.vy; sh.life -= 0.025;
-      }
+    /* 2. GitHub-Style 3D Rotating Dotted Globe with Orbital Arcs */
+    const gc = document.getElementById("globeCanvas");
+    const gctx = gc.getContext("2d");
+    let dpr = Math.min(window.devicePixelRatio || 1, 2);
 
-      requestAnimationFrame(draw);
+    // Fibonacci sphere points + simple procedural continent clusters
+    const DOT_COUNT = 950;
+    const globeDots = [];
+    const phi = Math.PI * (3 - Math.sqrt(5));
+    for (let i = 0; i < DOT_COUNT; i++) {
+      const y = 1 - (i / (DOT_COUNT - 1)) * 2;
+      const radius = Math.sqrt(1 - y * y);
+      const theta = phi * i;
+      const x = Math.cos(theta) * radius;
+      const z = Math.sin(theta) * radius;
+      // Organic noise pattern to mimic continent clusters
+      const cluster =
+        Math.sin(x * 3.1 + 0.5) * Math.cos(y * 2.7) +
+        Math.sin(z * 2.8 - y * 2.1) * 0.7;
+      globeDots.push({ x, y, z, land: cluster > 0.05 });
     }
 
-    addEventListener("resize", resize);
-    resize();
-    requestAnimationFrame(draw);
+    // Orbital arcs around the globe
+    const orbits = [
+      { rx: 1.32, ry: 0.36, tilt: -0.22, speed: 0.0012, offset: 0.0 },
+      { rx: 1.42, ry: 0.42, tilt: 0.18,  speed: -0.0009, offset: 2.1 },
+      { rx: 1.24, ry: 0.30, tilt: -0.42, speed: 0.0015, offset: 4.2 }
+    ];
+
+    function resizeGlobe() {
+      const rect = gc.getBoundingClientRect();
+      gc.width = rect.width * dpr;
+      gc.height = rect.height * dpr;
+    }
+
+    function drawGlobe(t) {
+      const w = gc.width, h = gc.height;
+      const cx = w / 2, cy = h / 2;
+      const R = Math.min(w, h) * 0.35;
+      gctx.clearRect(0, 0, w, h);
+
+      // Soft blue atmospheric halo behind globe
+      const halo = gctx.createRadialGradient(cx - R * 0.2, cy - R * 0.2, R * 0.1, cx, cy, R * 1.25);
+      halo.addColorStop(0, "rgba(56, 139, 253, 0.38)");
+      halo.addColorStop(0.55, "rgba(25, 65, 150, 0.18)");
+      halo.addColorStop(1, "rgba(4, 13, 33, 0)");
+      gctx.fillStyle = halo;
+      gctx.beginPath(); gctx.arc(cx, cy, R * 1.25, 0, 6.28); gctx.fill();
+
+      // Core dark sphere silhouette
+      const sphereGrad = gctx.createRadialGradient(cx - R * 0.3, cy - R * 0.3, R * 0.1, cx, cy, R);
+      sphereGrad.addColorStop(0, "#1c4ed8");
+      sphereGrad.addColorStop(0.55, "#0d2357");
+      sphereGrad.addColorStop(1, "#050e24");
+      gctx.fillStyle = sphereGrad;
+      gctx.beginPath(); gctx.arc(cx, cy, R, 0, 6.28); gctx.fill();
+
+      const rotY = t * 0.00035;
+      const cosR = Math.cos(rotY), sinR = Math.sin(rotY);
+
+      // Draw dotted globe points
+      for (const d of globeDots) {
+        const rx = d.x * cosR - d.z * sinR;
+        const rz = d.x * sinR + d.z * cosR;
+        const ry = d.y;
+        if (rz < -0.15) continue; // hide far back dots
+
+        const sx = cx + rx * R;
+        const sy = cy + ry * R;
+        const depth = (rz + 0.15) / 1.15;
+        const size = (d.land ? 2.1 : 1.1) * dpr * (0.5 + 0.5 * depth);
+        gctx.fillStyle = d.land
+          ? `rgba(210, 235, 255, ${0.25 + 0.75 * depth})`
+          : `rgba(88, 166, 255, ${0.12 + 0.25 * depth})`;
+        gctx.beginPath();
+        gctx.arc(sx, sy, size, 0, 6.28);
+        gctx.fill();
+      }
+
+      // Glowing hotspot flare on upper-left of globe
+      const flareX = cx - R * 0.28, flareY = cy - R * 0.28;
+      const flare = gctx.createRadialGradient(flareX, flareY, 0, flareX, flareY, R * 0.32);
+      flare.addColorStop(0, "rgba(180, 245, 255, 0.95)");
+      flare.addColorStop(0.3, "rgba(56, 189, 248, 0.45)");
+      flare.addColorStop(1, "rgba(56, 189, 248, 0)");
+      gctx.fillStyle = flare;
+      gctx.beginPath(); gctx.arc(flareX, flareY, R * 0.32, 0, 6.28); gctx.fill();
+
+      // Draw glowing orbital rings + traveling light nodes
+      for (const o of orbits) {
+        gctx.save();
+        gctx.translate(cx, cy);
+        gctx.rotate(o.tilt);
+
+        gctx.strokeStyle = "rgba(147, 197, 253, 0.38)";
+        gctx.lineWidth = 1.2 * dpr;
+        gctx.beginPath();
+        gctx.ellipse(0, 0, R * o.rx, R * o.ry, 0, 0, 6.28);
+        gctx.stroke();
+
+        // Moving bright node on each orbit
+        const angle = t * o.speed + o.offset;
+        const nx = Math.cos(angle) * R * o.rx;
+        const ny = Math.sin(angle) * R * o.ry;
+        gctx.fillStyle = "#ffffff";
+        gctx.shadowBlur = 12 * dpr;
+        gctx.shadowColor = "#38bdf8";
+        gctx.beginPath();
+        gctx.arc(nx, ny, 3.2 * dpr, 0, 6.28);
+        gctx.fill();
+        gctx.restore();
+      }
+
+      requestAnimationFrame(drawGlobe);
+    }
+
+    addEventListener("resize", resizeGlobe);
+    resizeGlobe();
+    requestAnimationFrame(drawGlobe);
   </script>
 </body>
 </html>
