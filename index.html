@@ -376,4 +376,77 @@
     }
 
     function drawGlobe(t) {
-      const w = gc.width, h = gc.height, cx = w /
+      const w = gc.width, h = gc.height, cx = w / 2, cy = h / 2;
+      const R = Math.min(w, h) * 0.35;
+      gctx.clearRect(0, 0, w, h);
+
+      if (!dragging) {
+        velocity *= 0.94;
+        spin += reduceMotion ? 0 : AUTO * 16.7 + velocity * 0.0;
+        if (Math.abs(velocity) > 0.0005) spin -= velocity;
+      }
+
+      // Atmosphere halo
+      const halo = gctx.createRadialGradient(cx, cy, R * 0.9, cx, cy, R * 1.35);
+      halo.addColorStop(0, "rgba(56,139,253,0.40)"); halo.addColorStop(0.5, "rgba(25,65,150,0.15)"); halo.addColorStop(1, "rgba(4,13,33,0)");
+      gctx.fillStyle = halo; gctx.beginPath(); gctx.arc(cx, cy, R * 1.35, 0, 6.28); gctx.fill();
+
+      orbits.forEach(o => orbitHalf(o, R, cx, cy, t, false));
+
+      // Ocean sphere
+      const sg = gctx.createRadialGradient(cx - R * 0.35, cy - R * 0.35, R * 0.1, cx, cy, R);
+      sg.addColorStop(0, "#1d4ed8"); sg.addColorStop(0.55, "#0c2459"); sg.addColorStop(1, "#040c20");
+      gctx.fillStyle = sg; gctx.beginPath(); gctx.arc(cx, cy, R, 0, 6.28); gctx.fill();
+
+      // Dots: back side faint, front side bright
+      for (const d of dots) {
+        const p = project(d.lon, d.lat);
+        const sx = cx + p.x * R, sy = cy - p.y * R;
+        if (p.z < 0) {
+          if (!d.land) continue;
+          gctx.fillStyle = "rgba(120,170,230,0.07)";
+          gctx.beginPath(); gctx.arc(sx, sy, 1 * dpr, 0, 6.28); gctx.fill();
+          continue;
+        }
+        const lit = 0.35 + 0.65 * p.z;
+        const lx = -(p.x + 0.45), ly = -(p.y - 0.45);
+        const sun = Math.max(0, 1 - Math.hypot(lx, ly) * 0.55); // light from upper-left
+        if (d.land) {
+          gctx.fillStyle = `rgba(${150 + 90 * sun | 0}, ${205 + 40 * sun | 0}, 255, ${0.3 + 0.7 * lit * (0.6 + 0.4 * sun)})`;
+          gctx.beginPath(); gctx.arc(sx, sy, 1.55 * dpr * (0.55 + 0.45 * p.z), 0, 6.28); gctx.fill();
+        } else {
+          gctx.fillStyle = `rgba(88,166,255,${0.07 + 0.16 * lit})`;
+          gctx.beginPath(); gctx.arc(sx, sy, 0.8 * dpr, 0, 6.28); gctx.fill();
+        }
+      }
+
+      // City pulses on the visible hemisphere
+      CITIES.forEach((c, i) => {
+        const p = project(c.lon, c.lat);
+        if (p.z < 0.12) return;
+        const sx = cx + p.x * R, sy = cy - p.y * R;
+        const ph = ((t * 0.0007 + i * 0.37) % 1);
+        gctx.strokeStyle = `rgba(103,232,249,${(1 - ph) * 0.8 * p.z})`;
+        gctx.lineWidth = 1.2 * dpr;
+        gctx.beginPath(); gctx.arc(sx, sy, (2 + ph * 11) * dpr, 0, 6.28); gctx.stroke();
+        gctx.fillStyle = "#e0faff"; gctx.shadowBlur = 10 * dpr; gctx.shadowColor = "#22d3ee";
+        gctx.beginPath(); gctx.arc(sx, sy, 2.2 * dpr, 0, 6.28); gctx.fill();
+        gctx.shadowBlur = 0;
+      });
+
+      // Soft rim light + specular glow
+      const rim = gctx.createRadialGradient(cx, cy, R * 0.82, cx, cy, R);
+      rim.addColorStop(0, "rgba(88,166,255,0)"); rim.addColorStop(1, "rgba(120,200,255,0.35)");
+      gctx.fillStyle = rim; gctx.beginPath(); gctx.arc(cx, cy, R, 0, 6.28); gctx.fill();
+      const fx = cx - R * 0.4, fy = cy - R * 0.4;
+      const flare = gctx.createRadialGradient(fx, fy, 0, fx, fy, R * 0.35);
+      flare.addColorStop(0, "rgba(180,245,255,0.35)"); flare.addColorStop(1, "rgba(56,189,248,0)");
+      gctx.fillStyle = flare; gctx.beginPath(); gctx.arc(fx, fy, R * 0.35, 0, 6.28); gctx.fill();
+
+      orbits.forEach(o => orbitHalf(o, R, cx, cy, t, true));
+      requestAnimationFrame(drawGlobe);
+    }
+    requestAnimationFrame(drawGlobe);
+  </script>
+</body>
+</html>
